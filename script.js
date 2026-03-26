@@ -162,3 +162,12 @@ window.loginWithGoogle = async function () {
     console.error('Error:', error.message)
   }
 }
+
+
+// En tu archivo JS:
+const btnLogin = document.getElementById('btn-login-google');
+
+btnLogin.addEventListener('click', async () => {
+    // Aquí va tu código de Supabase para iniciar sesión con Google
+    console.log("Iniciando sesión...");
+});

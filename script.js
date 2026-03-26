@@ -157,3 +157,16 @@ function actualizarVistaCarrito() {
 // INICIAR
 // =============================================
 document.addEventListener('DOMContentLoaded', cargarProductos);
+
+// =============================================
+// FINALIZAR COMPRA
+// =============================================
+window.irAPagar = function() {
+    if (cart.length === 0) {
+        alert("Tu carrito está vacío. ¡Agrega unas cositas lindas primero! 🌸");
+        return;
+    }
+    
+    console.log("Iniciando proceso de pago...");
+    alert(`¡Listo para procesar tu pago por $${total.toFixed(2)}! Aquí puedes conectar PayPal luego 💳`);
+};

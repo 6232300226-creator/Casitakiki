@@ -1,9 +1,31 @@
 // =============================================
-// CONFIGURACIÓN DE SUPABASE
+// CONFIGURACIÓN DE SUPABASE (solo una vez)
 // =============================================
-const supabaseUrl = 'https://uhahtlotlhzaxsdgarqc.supabase.co';
-const supabaseKey = 'sb_publishable_fa8XDuQxlbIIqDgimkmvdg_LUDm1wGf';
-const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+const _supabase = window.supabase.createClient(
+    'https://uhahtlotlhzaxsdgarqc.supabase.co',
+    'sb_publishable_fa8XDuQxlbIIqDgimkmvdg_LUDm1wGf'
+);
+
+// =============================================
+// LOGIN CON GOOGLE
+// =============================================
+async function loginWithGoogle() {
+    const { error } = await _supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+            redirectTo: window.location.href
+        }
+    });
+    if (error) {
+        console.error('Error al iniciar sesión:', error.message);
+        alert('Error al iniciar sesión con Google ❌');
+    }
+}
+
+const btnLogin = document.getElementById('btn-login-google');
+if (btnLogin) {
+    btnLogin.addEventListener('click', loginWithGoogle);
+}
 
 // =============================================
 // VARIABLES DEL CARRITO
@@ -104,7 +126,9 @@ function actualizarVistaCarrito() {
     countElement.innerText = cart.length;
 }
 
-
+// =============================================
+// PAGO CON PAYPAL
+// =============================================
 function irAPagar() {
     if (cart.length === 0) {
         alert("¡Tu carrito está vacío!");
@@ -131,45 +155,11 @@ async function registrarVenta(montoTotal) {
         console.error('Error al guardar la venta:', error);
         alert("Error al guardar la venta ❌");
     } else {
-        alert("¡Venta guardada! 🎂💖");\
+        alert("¡Venta guardada! 🎂💖");
     }
 }
-const supabaseUrl = 'https://uhahtlotlhzaxsdgarqc.supabase.co';
-const supabaseKey = 'sb_publishable_fa8XDuQxlbIIqDgimkmvdg_LUDm1wGf';
-const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
 // =============================================
 // INICIAR AL CARGAR LA PÁGINA
 // =============================================
 document.addEventListener('DOMContentLoaded', cargarProductos);
-
-// 🔹 Conexión a Supabase
-const supabaseUrl = 'https://6232300226-creator.github.io/Casitakiki/'
-const supabaseKey = 'sb_publishable_fa8XDuQxlbIIqDgimkmvdg_LUDm1wGf'
-
-
-const supabase = window.supabase.createClient(
-  'https://uhahtlotlhzaxsdgarqc.supabase.co',
-  'sb_publishable_fa8XDuQxlbIIqDgimkmvdg_LUDm1wGf'
-)
-
-window.loginWithGoogle = async function () {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: window.location.href
-    }
-  })
-
-  if (error) {
-    console.error('Error:', error.message)
-  }
-}
-
-
-// En tu archivo JS:
-const btnLogin = document.getElementById('btn-login-google');
-
-btnLogin.addEventListener('click', async () => {
-    // Aquí va tu código de Supabase para iniciar sesión con Google
-    console.log("Iniciando sesión...");
-});

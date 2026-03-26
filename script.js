@@ -131,10 +131,12 @@ async function registrarVenta(montoTotal) {
         console.error('Error al guardar la venta:', error);
         alert("Error al guardar la venta ❌");
     } else {
-        alert("¡Venta guardada! 🎂💖");
+        alert("¡Venta guardada! 🎂💖");\
     }
 }
-
+const supabaseUrl = 'https://uhahtlotlhzaxsdgarqc.supabase.co';
+const supabaseKey = 'sb_publishable_fa8XDuQxlbIIqDgimkmvdg_LUDm1wGf';
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 // =============================================
 // INICIAR AL CARGAR LA PÁGINA
 // =============================================

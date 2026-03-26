@@ -139,3 +139,39 @@ async function registrarVenta(montoTotal) {
 // INICIAR AL CARGAR LA PÁGINA
 // =============================================
 document.addEventListener('DOMContentLoaded', cargarProductos);
+
+// 🔹 Conexión a Supabase
+const supabaseUrl = 'https://TU-PROYECTO.supabase.co'
+const supabaseKey = 'TU-ANON-KEY'
+
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey)
+
+// 🔹 Login con Google
+async function loginWithGoogle() {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: window.location.href
+    }
+  })
+
+  if (error) {
+    console.error('Error al iniciar sesión:', error.message)
+  }
+}
+
+// 🔹 Detectar usuario logueado
+async function checkUser() {
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (user) {
+    console.log('Usuario logueado:', user)
+
+    // 👉 Aquí puedes cambiar el botón
+    const btn = document.querySelector('header button')
+    btn.innerText = "Hola, " + user.user_metadata.full_name
+  }
+}
+
+// Ejecutar al cargar la página
+checkUser()

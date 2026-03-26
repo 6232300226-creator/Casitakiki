@@ -147,7 +147,7 @@ const supabaseKey = 'TU-ANON-KEY'
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey)
 
 // 🔹 Login con Google
-async function loginWithGoogle() {
+window.loginWithGoogle = async function () {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {

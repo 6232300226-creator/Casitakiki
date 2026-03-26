@@ -175,3 +175,8 @@ async function checkUser() {
 
 // Ejecutar al cargar la página
 checkUser()
+
+const supabase = window.supabase.createClient(
+  'https://TU-PROYECTO.supabase.co',
+  'TU-ANON-KEY'
+)

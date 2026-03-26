@@ -54,7 +54,7 @@ _supabase.auth.onAuthStateChange((event, session) => {
     if (session) {
         actualizarBotonUsuario(session.user);
     }
-});
+);
 
 verificarSesion();
 // =============================================

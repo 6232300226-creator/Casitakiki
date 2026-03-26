@@ -1,5 +1,5 @@
 const _supabase = window.supabase.createClient(
-    'https://uhahtlotlhzaxsdgarqc.supabase.co',
+' https://uhahtlotlhzaxsdgarqc.supabase.co',
     'sb_publishable_fa8XDuQxlbIIqDgimkmvdg_LUDm1wGf'
 );
 

@@ -28,6 +28,38 @@ if (btnLogin) {
 }
 
 // =============================================
+// VERIFICAR SESIÓN AL CARGAR
+// =============================================
+async function verificarSesion() {
+    const { data: { session } } = await _supabase.auth.getSession();
+    if (session) {
+        actualizarBotonUsuario(session.user);
+    }
+}
+
+function actualizarBotonUsuario(user) {
+    const btn = document.getElementById('btn-login-google');
+    if (!btn) return;
+    const nombre = user.user_metadata.full_name || user.email;
+    btn.textContent = `👋 ${nombre}`;
+    btn.onclick = async () => {
+        await _supabase.auth.signOut();
+        btn.textContent = '🔐 Iniciar con Google';
+        btn.onclick = loginWithGoogle;
+    };
+}
+
+// Detecta cuando regresa del redirect de Google
+_supabase.auth.onAuthStateChange((event, session) => {
+    if (session) {
+        actualizarBotonUsuario(session.user);
+    }
+});
+
+verificarSesion();
+}
+
+// =============================================
 // VARIABLES DEL CARRITO
 // =============================================
 let cart = [];

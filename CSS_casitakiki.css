@@ -531,3 +531,24 @@ footer {
     96% { transform: translateX(-66.66%); }
     100% { transform: translateX(0); }
 }
+
+/* ===== BOTÓN LOGIN GOOGLE ===== */
+#btn-login-google {
+    background: white;
+    border: 2px solid #ffe4ed;
+    padding: 8px 18px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #854d5f;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.9rem;
+    transition: 0.3s;
+    white-space: nowrap;
+}
+
+#btn-login-google:hover {
+    background: #fff0f5;
+    border-color: #ff9dbf;
+    transform: scale(1.05);
+}

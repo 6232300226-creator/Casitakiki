@@ -9,13 +9,19 @@ const _supabase = window.supabase.createClient(
 // =============================================
 // LOGIN CON GOOGLE
 // =============================================
-async function loginWithGoogle() {
+window.loginWithGoogle = async function () {
     const { error } = await _supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
             redirectTo: window.location.href
         }
     });
+
+    if (error) {
+        console.error('Error al iniciar sesión:', error.message);
+        alert('Error al iniciar sesión con Google ❌');
+    }
+}
     if (error) {
         console.error('Error al iniciar sesión:', error.message);
         alert('Error al iniciar sesión con Google ❌');

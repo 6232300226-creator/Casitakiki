@@ -8,12 +8,10 @@
 </head>
 <body>
 
-    <!-- ===== HEADER ===== -->
     <header>
         <div class="logo-container">
             <img src="img/logo_fondoblanco.png" class="mi-logo" alt="La Casita de Kiki">
         </div>
-
         <nav>
             <ul>
                 <li><a href="#maquillaje">Maquillaje</a></li>
@@ -21,46 +19,32 @@
                 <li><a href="#juguetes">Juguetes</a></li>
             </ul>
         </nav>
-
-        <!-- 🔥 BOTÓN LOGIN (IMPORTANTE: solo ID, sin onclick) -->
-        <button id="btn-login-google" class="btn-login">
-            🔐 Iniciar con Google
-        </button>
+        <button id="btn-login-google">🔐 Iniciar con Google</button>
     </header>
 
-    <!-- ===== ÍCONO CARRITO ===== -->
     <div id="cart-icon" onclick="toggleCart()">
         🛒 <span id="cart-count">0</span>
     </div>
 
-    <!-- ===== PANEL CARRITO ===== -->
     <aside id="shopping-cart" class="cart-hidden">
         <div class="cart-header">
             <h3>Tu Pedido ✨</h3>
             <button onclick="toggleCart()" class="close-btn">×</button>
         </div>
-
         <div id="cart-items">
             <p class="empty-msg">Tu carrito está vacío 🌸</p>
         </div>
-
         <div class="cart-footer">
             <div class="total-container">
                 <h4>Total:</h4>
                 <h4>$<span id="cart-total">0.00</span></h4>
             </div>
-
             <img src="img/imagen_pago.png" alt="Métodos de pago" style="width: 100%; margin-bottom: 10px;">
-
-            <button class="btn-checkout" id="finalizar-compra" onclick="irAPagar()">
-                Finalizar Compra 💳
-            </button>
-
+            <button class="btn-checkout" id="finalizar-compra" onclick="irAPagar()">Finalizar Compra 💳</button>
             <div id="paypal-button-container" style="display: none; margin-top: 15px;"></div>
         </div>
     </aside>
 
-    <!-- ===== HERO ===== -->
     <section id="hero-banner">
         <div class="banner-content">
             <h2>¡Bienvenidos a la casita de Kiki! ✨</h2>
@@ -69,23 +53,63 @@
         </div>
     </section>
 
-    <!-- ===== PRODUCTOS ===== -->
+    <section class="carrusel-container">
+        <div class="carrusel-track">
+            <div class="carrusel-slide">
+                <img src="img/imagen_mensajeria.png" alt="Comunicación rápida">
+                <div class="carrusel-text">
+                    <h2>Comunicación rápida</h2>
+                </div>
+            </div>
+            <div class="carrusel-slide">
+                <img src="img/gloss_ejemplo1.jpg" alt="Nuevos productos">
+                <div class="carrusel-text">
+                    <h2>¡Ofertas en nuevos productos!</h2>
+                    <p>Maquillaje, juguetes y más...</p>
+                </div>
+            </div>
+            <div class="carrusel-slide">
+                <img src="img/imagen_envio.png" alt="Envíos rápidos">
+                <div class="carrusel-text">
+                    <h2>Envíos rápidos y seguros</h2>
+                    <p>Pide con confianza, nosotros nos encargamos del resto</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="hero" style="text-align: center; padding: 40px;">
+        <h2>Cosas lindas para personas increíbles</h2>
+        <p>Explora nuestra colección de novedades.</p>
+    </section>
+
     <main id="productos">
         <div class="grid-productos"></div>
     </main>
 
-    <!-- ===== WHATSAPP ===== -->
     <a href="https://wa.me/5546541735" class="whatsapp-btn" target="_blank">
-        💬 ¡Pide tus pasteles aquí!
+        <span class="icon-ws">💬</span> ¡Pide tus pasteles aquí!
     </a>
 
-    <!-- ===== FOOTER ===== -->
     <footer>
-        <p>© 2025 La Casita de Kiki 🌸</p>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Nuestras Redes</h4>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/la_casita_de_kiki?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==">
+                        <img src="img/IG_logo.jpg" alt="Instagram" class="social-icon">
+                    </a>
+                    <a href="https://www.facebook.com/profile.php?id=61576877447369">
+                        <img src="img/FB_logo.jpg" alt="Facebook" class="social-icon">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 La Casita de Kiki 🌸 Todos los derechos reservados</p>
+        </div>
     </footer>
 
-    <!-- ===== SCRIPTS ===== -->
-    <!-- 🔥 ORDEN IMPORTANTE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="script.js"></script>
 

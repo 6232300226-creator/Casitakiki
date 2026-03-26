@@ -141,12 +141,15 @@ async function registrarVenta(montoTotal) {
 document.addEventListener('DOMContentLoaded', cargarProductos);
 
 // 🔹 Conexión a Supabase
-const supabaseUrl = 'https://TU-PROYECTO.supabase.co'
-const supabaseKey = 'TU-ANON-KEY'
+const supabaseUrl = 'https://6232300226-creator.github.io/Casitakiki/'
+const supabaseKey = 'sb_publishable_fa8XDuQxlbIIqDgimkmvdg_LUDm1wGf'
 
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey)
 
-// 🔹 Login con Google
+const supabase = window.supabase.createClient(
+  'https://uhahtlotlhzaxsdgarqc.supabase.co',
+  'sb_publishable_fa8XDuQxlbIIqDgimkmvdg_LUDm1wGf'
+)
+
 window.loginWithGoogle = async function () {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
@@ -156,27 +159,6 @@ window.loginWithGoogle = async function () {
   })
 
   if (error) {
-    console.error('Error al iniciar sesión:', error.message)
+    console.error('Error:', error.message)
   }
 }
-
-// 🔹 Detectar usuario logueado
-async function checkUser() {
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (user) {
-    console.log('Usuario logueado:', user)
-
-    // 👉 Aquí puedes cambiar el botón
-    const btn = document.querySelector('header button')
-    btn.innerText = "Hola, " + user.user_metadata.full_name
-  }
-}
-
-// Ejecutar al cargar la página
-checkUser()
-
-const supabase = window.supabase.createClient(
-  'https://TU-PROYECTO.supabase.co',
-  'TU-ANON-KEY'
-)

@@ -57,7 +57,6 @@ _supabase.auth.onAuthStateChange((event, session) => {
 });
 
 verificarSesion();
-}
 
 // =============================================
 // VARIABLES DEL CARRITO
@@ -121,7 +120,6 @@ function agregarAlCarrito(nombre, precio) {
     total += Number(precio);
     actualizarVistaCarrito();
 
-    // Abre el carrito automáticamente
     const cartPanel = document.getElementById('shopping-cart');
     cartPanel.classList.remove('cart-hidden');
 }

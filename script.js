@@ -57,7 +57,6 @@ _supabase.auth.onAuthStateChange((event, session) => {
 });
 
 verificarSesion();
-}
 // =============================================
 // VARIABLES DEL CARRITO
 // =============================================

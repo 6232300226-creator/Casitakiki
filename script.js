@@ -180,6 +180,5 @@ async function registrarVenta(total) {
     await _supabase.from('ventas').insert([
         { total: total, metodo_pago: 'PayPal' }
     ]);
-}
 
 document.addEventListener("DOMContentLoaded", cargarProductos);

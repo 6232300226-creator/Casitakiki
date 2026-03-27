@@ -8,7 +8,6 @@ let total = 0;
 let paypalRendered = false;
 
 /* LOGIN GOOGLE */
-/* LOGIN GOOGLE */
 async function loginWithGoogle() {
     console.log("¡Hiciste clic en el botón de Google!");
     
@@ -122,7 +121,7 @@ function actualizarVistaCarrito() {
                 <button onclick="eliminarDelCarrito(${index})" style="background: #ffc1d6; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; color: white;">✖</button>
             </div>
             `;
-        });
+        );
     }
 
     totalElement.innerText = total.toFixed(2);

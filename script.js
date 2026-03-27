@@ -9,24 +9,10 @@ let paypalRendered = false;
 
 /* LOGIN GOOGLE */
 async function loginWithGoogle() {
-    console.log("¡Hiciste clic en el botón de Google!");
-    
-    try {
-        const { data, error } = await _supabase.auth.signInWithOAuth({
-            provider: 'google',
-            options: { 
-                // Esto te regresa a la página donde estás
-                redirectTo: window.location.origin 
-            }
-        });
-
-        if (error) {
-            console.error("Error al conectar con Supabase:", error.message);
-            alert("No se pudo iniciar sesión: " + error.message);
-        }
-    } catch (err) {
-        console.error("Error en el código:", err);
-    }
+    const { error } = await _supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.href }
+    });
 }
 
 /* CARGAR PRODUCTOS */
@@ -121,7 +107,7 @@ function actualizarVistaCarrito() {
                 <button onclick="eliminarDelCarrito(${index})" style="background: #ffc1d6; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; color: white;">✖</button>
             </div>
             `;
-        } );
+        });
     }
 
     totalElement.innerText = total.toFixed(2);
@@ -131,7 +117,6 @@ function actualizarVistaCarrito() {
         countElement.innerText = cart.length;
     }
 }
-
 /* BOTON PAGAR */
 function irAPagar() {
 

@@ -373,3 +373,10 @@ footer {
     border-color: #ff9dbf;
     transform: scale(1.05);
 }
+
+.cart-hidden {
+    transform: translateX(100%);
+}
+#shopping-cart {
+    transition: transform 0.3s ease;
+}

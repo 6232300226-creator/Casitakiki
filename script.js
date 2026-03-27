@@ -131,7 +131,7 @@ function actualizarVistaCarrito() {
         countElement.innerText = cart.length;
     }
 }
-}
+
 /* BOTON PAGAR */
 function irAPagar() {
 

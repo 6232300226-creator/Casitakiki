@@ -6,219 +6,126 @@
     <title>La casita de Kiki</title>
     <link rel="stylesheet" href="CSS_casitakiki.css">
 </head>
-  <body>
 
-    <header>
-        <div class="logo-container">
-            <img src="img/logo_fondoblanco.png" class="mi-logo" alt="La Casita de Kiki">
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#maquillaje">Maquillaje</a></li>
-                <li><a href="#pasteles">Pasteles</a></li>
-                <li><a href="#juguetes">Juguetes</a></li>
-            </ul>
-        </nav>
-        <button id="btn-login-google"> Iniciar con Google</button>
-    </header>
+<body>
 
-    <div id="cart-icon" onclick="toggleCart()">
-        🛒 <span id="cart-count">0</span>
+<header>
+    <div class="logo-container">
+        <img src="img/logo_fondoblanco.png" class="mi-logo" alt="La Casita de Kiki">
     </div>
+    <nav>
+        <ul>
+            <li><a href="#maquillaje">Maquillaje</a></li>
+            <li><a href="#pasteles">Pasteles</a></li>
+            <li><a href="#juguetes">Juguetes</a></li>
+        </ul>
+    </nav>
+    <button id="btn-login-google"> Iniciar con Google</button>
+</header>
 
-    <aside id="shopping-cart" class="cart-hidden">
-        <div class="cart-header">
-            <h3>Tu Pedido ✨</h3>
-            <button onclick="toggleCart()" class="close-btn">×</button>
-        </div>
-        <div id="cart-items">
-            <p class="empty-msg">Tu carrito está vacío 🌸</p>
-        </div>
-        <div class="cart-footer">
-            <div class="total-container">
-                <h4>Total:</h4>
-                <h4>$<span id="cart-total">0.00</span></h4>
-            </div>
-            <img src="img/imagen_pago.png" alt="Métodos de pago" style="width: 100%; margin-bottom: 10px;">
-            <button class="btn-checkout" id="finalizar-compra" onclick="irAPagar()">Finalizar Compra 💳</button>
-            <div id="paypal-button-container" style="display: none; margin-top: 15px;"></div>
-        </div>
-          <!-- Resumen del carrito -->
-<div id="resumen-paypal" style="
-  border:1px solid #e0e0e0; padding:24px; border-radius:10px;
-  max-width:420px; margin:30px auto; font-family:sans-serif; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
-  
-  <h3 style="margin-top:0">🛒 Resumen de tu pedido</h3>
-  <div id="lista-productos"></div>
-  <hr style="border:none; border-top:1px solid #eee; margin:16px 0">
-  <p style="font-size:18px; font-weight:bold;">
-    Total: $<span id="total-final">0.00</span> MXN
-  </p>
-
-  <!-- PayPal pone sus botones aquí -->
-  <div id="paypal-button-container"></div>
-
-  <!-- Mensaje de éxito -->
-  <div id="pago-exitoso" style="display:none; background:#e6f4ea; color:#2e7d32;
-    padding:14px; border-radius:6px; margin-top:12px; text-align:center;">
-    ✅ ¡Pago completado! Gracias por tu compra.
-  </div>
+<div id="cart-icon" onclick="toggleCart()">
+    🛒 <span id="cart-count">0</span>
 </div>
 
-<!-- SDK de PayPal: reemplaza TU_CLIENT_ID con el tuyo -->
+<aside id="shopping-cart" class="cart-hidden">
+    <div class="cart-header">
+        <h3>Tu Pedido ✨</h3>
+        <button onclick="toggleCart()" class="close-btn">×</button>
+    </div>
+
+    <div id="cart-items">
+        <p class="empty-msg">Tu carrito está vacío 🌸</p>
+    </div>
+
+    <div class="cart-footer">
+        <div class="total-container">
+            <h4>Total:</h4>
+            <h4>$<span id="cart-total">0.00</span></h4>
+        </div>
+
+        <img src="img/imagen_pago.png" alt="Métodos de pago" style="width: 100%; margin-bottom: 10px;">
+
+        <button class="btn-checkout" id="finalizar-compra" onclick="irAPagar()">
+            Finalizar Compra 💳
+        </button>
+
+        <!-- SOLO UN contenedor PayPal -->
+        <div id="paypal-button-container" style="display:none; margin-top:15px;"></div>
+    </div>
+</aside>
+
+
+<section id="hero-banner">
+    <div class="banner-content">
+        <h2>¡Bienvenidos a la casita de Kiki! ✨</h2>
+        <p>Maquillaje que brilla, pasteles que enamoran y juguetes de novedad.</p>
+        <a href="#productos" class="btn-explorar">Ver Novedades 🎀</a>
+    </div>
+</section>
+
+<main id="productos">
+    <div class="grid-productos"></div>
+</main>
+
+<footer>
+    <p>© 2025 La Casita de Kiki 🌸</p>
+</footer>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- PAYPAL SDK -->
 <script src="https://www.paypal.com/sdk/js?client-id=Ae2ycmRRzMtvtuQN2jfJ_l9Qf3Rji20g3tzh854KIdj1_0XexWv9zQnoPY7qVLWAHAX-Ki9uWKZdpVrK&currency=MXN"></script>
 
+<!-- SCRIPT PRINCIPAL -->
+<script src="script.js"></script>
+
+<!-- PAYPAL -->
 <script>
-  // ── 1. Carga el carrito desde localStorage ─────────────────────
-  // Asegúrate de que tu tienda guarda el carrito en este formato:
-  // [{ name: "Producto", price: 100, quantity: 2 }, ...]
-  const carrito = JSON.parse(localStorage.getItem("carrito")) || [
-    { name: "Producto ejemplo", price: 199.00, quantity: 1 }
-  ];
+function renderPayPal(totalPaypal){
 
-  // ── 2. Muestra el resumen ──────────────────────────────────────
-  const lista = document.getElementById("lista-productos");
-  let totalpaypal = 0;
+    paypal.Buttons({
 
-  carrito.forEach(item => {
-    const subtotal = item.price * item.quantity;
-    total += subtotal;
-    lista.innerHTML += `
-      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-        <span>${item.quantity}x ${item.name}</span>
-        <span>$${subtotal.toFixed(2)}</span>
-      </div>`;
-  });
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        currency_code: "MXN",
+                        value: totalPaypal.toFixed(2)
+                    }
+                }]
+            });
+        },
 
-  document.getElementById("total-final").textContent = total.toFixed(2);
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function() {
+                alert("✅ Pago completado");
+                cart = [];
+                total = 0;
+                actualizarVistaCarrito();
+                document.getElementById("paypal-button-container").style.display="none";
+            });
+        }
 
-  // ── 3. Renderiza los botones de PayPal ─────────────────────────
-  paypal.Buttons({
+    }).render("#paypal-button-container");
+}
 
-    // Crea la orden con el total del carrito
-    createOrder: function(data, actions) {
-      return actions.order.create({
-        purchase_units: [{
-          description: "Compra en mi tienda",
-          amount: {
-            currency_code: "MXN",
-            value: total.toFixed(2),
-            breakdown: {
-              item_total: {
-                currency_code: "MXN",
-                value: total.toFixed(2)
-              }
-            }
-          },
-          items: carrito.map(item => ({
-            name: item.name,
-            quantity: String(item.quantity),
-            unit_amount: {
-              currency_code: "MXN",
-              value: item.price.toFixed(2)
-            }
-          }))
-        }]
-      });
-    },
-
-    // Si el pago fue aprobado
-    onApprove: function(data, actions) {
-      return actions.order.capture().then(function(detalles) {
-        document.getElementById("paypal-button-container").style.display = "none";
-        document.getElementById("pago-exitoso").style.display = "block";
-        document.getElementById("pago-exitoso").innerHTML = `
-          ✅ ¡Pago completado!<br>
-          Gracias, <strong>${detalles.payer.name.given_name}</strong>.<br>
-          <small>ID de transacción: ${detalles.id}</small>`;
-        // Opcional: limpia el carrito después del pago
-        localStorage.removeItem("carrito");
-      });
-    },
-
-    // Si el usuario cancela
-    onCancel: function() {
-      alert("Cancelaste el pago. Puedes intentarlo de nuevo cuando quieras.");
-    },
-
-    // Si hay un error
-    onError: function(err) {
-      alert("Ocurrió un error con PayPal. Intenta de nuevo.");
-      console.error(err);
+// sobrescribe tu función irAPagar para usar PayPal
+function irAPagar() {
+    if (cart.length === 0) {
+        alert("Tu carrito esta vacio!");
+        return;
     }
 
-  }).render("#paypal-button-container");
+    document.getElementById("finalizar-compra").style.display = "none";
+
+    const paypalContainer = document.getElementById("paypal-button-container");
+    paypalContainer.style.display = "block";
+
+    paypalContainer.innerHTML = "";
+    renderPayPal(total);
+}
 </script>
-
-    </aside>
-
-    <section id="hero-banner">
-        <div class="banner-content">
-            <h2>¡Bienvenidos a la casita de Kiki! ✨</h2>
-            <p>Maquillaje que brilla, pasteles que enamoran y juguetes de novedad.</p>
-            <a href="#productos" class="btn-explorar">Ver Novedades 🎀</a>
-        </div>
-    </section>
-
-    <section class="carrusel-container">
-        <div class="carrusel-track">
-            <div class="carrusel-slide">
-                <img src="img/imagen_mensajeria.png" alt="Comunicación rápida">
-                <div class="carrusel-text">
-                    <h2>Comunicación rápida</h2>
-                </div>
-            </div>
-            <div class="carrusel-slide">
-                <img src="img/gloss_ejemplo1.jpg" alt="Nuevos productos">
-                <div class="carrusel-text">
-                    <h2>¡Ofertas en nuevos productos!</h2>
-                    <p>Maquillaje, juguetes y más...</p>
-                </div>
-            </div>
-            <div class="carrusel-slide">
-                <img src="img/imagen_envio.png" alt="Envíos rápidos">
-                <div class="carrusel-text">
-                    <h2>Envíos rápidos y seguros</h2>
-                    <p>Pide con confianza, nosotros nos encargamos del resto</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="hero" style="text-align: center; padding: 40px;">
-        <h2>Cosas lindas para personas increíbles</h2>
-        <p>Explora nuestra colección de novedades.</p>
-    </section>
-
-    <main id="productos">
-        <div class="grid-productos"></div>
-    </main>
-
-    <a href="https://wa.me/5546541735" class="whatsapp-btn" target="_blank">
-        <span class="icon-ws">💬</span> ¡Pide tus pasteles aquí!
-    </a>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Nuestras Redes</h4>
-                <div class="social-links">
-                    <a href="https://www.instagram.com/la_casita_de_kiki?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==">
-                        <img src="img/IG_logo.jpg" alt="Instagram" class="social-icon">
-                    </a>
-                    <a href="https://www.facebook.com/profile.php?id=61576877447369">
-                        <img src="img/FB_logo.jpg" alt="Facebook" class="social-icon">
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2025 La Casita de Kiki 🌸 Todos los derechos reservados</p>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="script.js"></script>
 
 </body>
 </html>

@@ -116,7 +116,7 @@ function actualizarVistaCarrito() {
     if (countElement) {
         countElement.innerText = cart.length;
     }
-}
+
 /* BOTON PAGAR */
 function irAPagar() {
 

@@ -147,3 +147,10 @@ async function registrarVenta(montoTotal) {
 }
 
 document.addEventListener('DOMContentLoaded', cargarProductos);
+function irAPagar() {
+    const paypalContainer = document.getElementById("paypal-button-container");
+    
+    if (paypalContainer) {
+        paypalContainer.style.display = "block";
+    }
+}

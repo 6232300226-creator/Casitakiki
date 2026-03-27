@@ -52,18 +52,7 @@
         <!-- SOLO UN contenedor PayPal -->
         <div id="paypal-button-container" style="display:none; margin-top:15px;"></div>
     </div>
-    <div class="cart-footer">
-    <div class="total-container">
-        <h4>Total:</h4>
-        <h4>$<span id="cart-total">0.00</span></h4>
-    </div>
-
-    <button class="btn-checkout" id="finalizar-compra" onclick="irAPagar()">
-        Finalizar Compra 💳
-    </button>
-
-    <div id="paypal-button-container" style="display:none;"></div>
-</div>
+   
 </aside>
 
 
@@ -91,54 +80,6 @@
 
 <!-- SCRIPT PRINCIPAL -->
 <script src="script.js"></script>
-
-<script>
-function irAPagar() {
-    if (typeof cart === "undefined" || cart.length === 0) {
-        alert("Tu carrito esta vacio!");
-        return;
-    }
-
-    const btn = document.getElementById("finalizar-compra");
-    const paypalContainer = document.getElementById("paypal-button-container");
-
-    btn.style.display = "none";
-    paypalContainer.style.display = "block";
-    paypalContainer.innerHTML = "";
-
-    paypal.Buttons({
-
-        createOrder: function(data, actions) {
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        currency_code: "MXN",
-                        value: total.toFixed(2)
-                    }
-                }]
-            });
-        },
-
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function() {
-                alert("✅ Pago completado");
-                cart = [];
-                total = 0;
-                actualizarVistaCarrito();
-                paypalContainer.style.display = "none";
-                btn.style.display = "block";
-            });
-        },
-
-        onError: function(err){
-            console.error(err);
-            alert("Error con PayPal");
-        }
-
-    }).render("#paypal-button-container");
-}
-</script>
-
 
 </body>
 </html>

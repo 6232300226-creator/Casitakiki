@@ -182,3 +182,4 @@ async function registrarVenta(total) {
     ]);
 }    
 document.addEventListener("DOMContentLoaded", cargarProductos);
+}

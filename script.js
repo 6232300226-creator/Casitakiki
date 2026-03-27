@@ -155,23 +155,6 @@ function renderPaypal() {
             .classList.add("cart-hidden");
     });
 }
-            return actions.order.capture().then(function(details) {
-
-                alert("Pago completado por " + details.payer.name.given_name);
-
-                registrarVenta(total);
-
-                cart = [];
-                total = 0;
-                paypalRendered = false;
-
-                actualizarVistaCarrito();
-
-                document.getElementById("paypal-button-container").innerHTML = "";
-                document.getElementById("paypal-button-container").style.display = "none";
-                document.getElementById("finalizar-compra").style.display = "block";
-            });
-        }
 
     }).render('#paypal-button-container');
 }

@@ -6,7 +6,45 @@
     <title>La casita de Kiki</title>
     <link rel="stylesheet" href="CSS_casitakiki.css">
 </head>
-    <!-- Resumen del carrito -->
+  
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="img/logo_fondoblanco.png" class="mi-logo" alt="La Casita de Kiki">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#maquillaje">Maquillaje</a></li>
+                <li><a href="#pasteles">Pasteles</a></li>
+                <li><a href="#juguetes">Juguetes</a></li>
+            </ul>
+        </nav>
+        <button id="btn-login-google"> Iniciar con Google</button>
+    </header>
+
+    <div id="cart-icon" onclick="toggleCart()">
+        🛒 <span id="cart-count">0</span>
+    </div>
+
+    <aside id="shopping-cart" class="cart-hidden">
+        <div class="cart-header">
+            <h3>Tu Pedido ✨</h3>
+            <button onclick="toggleCart()" class="close-btn">×</button>
+        </div>
+        <div id="cart-items">
+            <p class="empty-msg">Tu carrito está vacío 🌸</p>
+        </div>
+        <div class="cart-footer">
+            <div class="total-container">
+                <h4>Total:</h4>
+                <h4>$<span id="cart-total">0.00</span></h4>
+            </div>
+            <img src="img/imagen_pago.png" alt="Métodos de pago" style="width: 100%; margin-bottom: 10px;">
+            <button class="btn-checkout" id="finalizar-compra" onclick="irAPagar()">Finalizar Compra 💳</button>
+            <div id="paypal-button-container" style="display: none; margin-top: 15px;"></div>
+        </div>
+          <!-- Resumen del carrito -->
 <div id="resumen-paypal" style="
   border:1px solid #e0e0e0; padding:24px; border-radius:10px;
   max-width:420px; margin:30px auto; font-family:sans-serif; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
@@ -112,43 +150,6 @@
 
   }).render("#paypal-button-container");
 </script>
-<body>
-
-    <header>
-        <div class="logo-container">
-            <img src="img/logo_fondoblanco.png" class="mi-logo" alt="La Casita de Kiki">
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#maquillaje">Maquillaje</a></li>
-                <li><a href="#pasteles">Pasteles</a></li>
-                <li><a href="#juguetes">Juguetes</a></li>
-            </ul>
-        </nav>
-        <button id="btn-login-google"> Iniciar con Google</button>
-    </header>
-
-    <div id="cart-icon" onclick="toggleCart()">
-        🛒 <span id="cart-count">0</span>
-    </div>
-
-    <aside id="shopping-cart" class="cart-hidden">
-        <div class="cart-header">
-            <h3>Tu Pedido ✨</h3>
-            <button onclick="toggleCart()" class="close-btn">×</button>
-        </div>
-        <div id="cart-items">
-            <p class="empty-msg">Tu carrito está vacío 🌸</p>
-        </div>
-        <div class="cart-footer">
-            <div class="total-container">
-                <h4>Total:</h4>
-                <h4>$<span id="cart-total">0.00</span></h4>
-            </div>
-            <img src="img/imagen_pago.png" alt="Métodos de pago" style="width: 100%; margin-bottom: 10px;">
-            <button class="btn-checkout" id="finalizar-compra" onclick="irAPagar()">Finalizar Compra 💳</button>
-            <div id="paypal-button-container" style="display: none; margin-top: 15px;"></div>
-        </div>
     </aside>
 
     <section id="hero-banner">

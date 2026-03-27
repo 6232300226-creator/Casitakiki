@@ -129,7 +129,7 @@ function actualizarVistaCarrito() {
     // Solo actualiza el numerito del icono si el icono existe
     if (countElement) {
         countElement.innerText = cart.length;
-    }
+    } 
 }
 /* BOTON PAGAR */
 function irAPagar() {

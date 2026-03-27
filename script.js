@@ -46,8 +46,7 @@ if (btnLogin) {
 
 verificarSesion();
 
-let cart = [];
-let total = 0;
+
 
 async function cargarProductos() {
     console.log("Cargando productos desde Supabase...");

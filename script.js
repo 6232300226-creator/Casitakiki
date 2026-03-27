@@ -38,48 +38,55 @@ async function cargarProductos() {
     });
 }
 
-/* ABRIR / CERRAR CARRITO */
+// ==========================================
+// LÓGICA DEL CARRITO (A PRUEBA DE ERRORES)
+// ==========================================
+
 function toggleCart() {
     const cartPanel = document.getElementById("shopping-cart");
-    cartPanel.classList.toggle("cart-hidden");
+    if(cartPanel) {
+        cartPanel.classList.toggle("cart-hidden");
+    } else {
+        console.error("Falta el <aside id='shopping-cart'> en tu HTML");
+    }
 }
 
-/* AGREGAR PRODUCTO */
 function agregarAlCarrito(nombre, precio) {
-
     const existente = cart.find(p => p.nombre === nombre);
-
+    
     if (existente) {
         existente.cantidad += 1;
     } else {
-        cart.push({
-            nombre,
-            precio: Number(precio),
-            cantidad: 1
+        cart.push({ 
+            nombre: nombre, 
+            precio: Number(precio), 
+            cantidad: 1 
         });
     }
-
+    
     actualizarVistaCarrito();
-    document.getElementById("shopping-cart").classList.remove("cart-hidden");
+    
+    // Forzar a que se abra el carrito al agregar
+    const cartPanel = document.getElementById("shopping-cart");
+    if(cartPanel) {
+        cartPanel.classList.remove("cart-hidden");
+    }
 }
 
-/* ELIMINAR */
 function eliminarDelCarrito(index) {
     cart.splice(index, 1);
     actualizarVistaCarrito();
 }
 
-/* ACTUALIZAR UI */
-/* ACTUALIZAR UI */
 function actualizarVistaCarrito() {
     const items = document.getElementById("cart-items");
     const totalElement = document.getElementById("cart-total");
     const countElement = document.getElementById("cart-count");
 
-    // Escudo: Si falta algún elemento en el HTML, avisa en consola pero no congela la página
-    if (!items || !totalElement || !countElement) {
-        console.error("Falta un elemento del carrito en el HTML");
-        return; 
+    // Si falta el contenedor de items, detenemos la función para no romper la página
+    if (!items || !totalElement) {
+        console.error("Falta #cart-items o #cart-total en el HTML.");
+        return;
     }
 
     items.innerHTML = "";
@@ -92,19 +99,24 @@ function actualizarVistaCarrito() {
             const subtotal = item.precio * item.cantidad;
             total += subtotal;
 
+            // Inyectamos los productos con estilos directos por si falla el CSS
             items.innerHTML += `
-            <div class="cart-item">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #ffe4ed; color: #854d5f; font-weight: bold;">
                 <span>${item.nombre} (x${item.cantidad})</span>
-                <span>$${subtotal.toFixed(2)}</span>
-                <button onclick="eliminarDelCarrito(${index})">❌</button>
+                <span style="color: #ff6b9d;">$${subtotal.toFixed(2)}</span>
+                <button onclick="eliminarDelCarrito(${index})" style="background: #ffc1d6; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; color: white;">✖</button>
             </div>
             `;
         });
     }
 
     totalElement.innerText = total.toFixed(2);
-    countElement.innerText = cart.length;
-}
+    
+    // Solo actualiza el numerito del icono si el icono existe
+    if (countElement) {
+        countElement.innerText = cart.length;
+    }
+}}
 /* BOTON PAGAR */
 function irAPagar() {
 

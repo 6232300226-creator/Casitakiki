@@ -8,11 +8,26 @@ let total = 0;
 let paypalRendered = false;
 
 /* LOGIN GOOGLE */
+/* LOGIN GOOGLE */
 async function loginWithGoogle() {
-    const { error } = await _supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: { redirectTo: window.location.href }
-    });
+    console.log("¡Hiciste clic en el botón de Google!");
+    
+    try {
+        const { data, error } = await _supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: { 
+                // Esto te regresa a la página donde estás
+                redirectTo: window.location.origin 
+            }
+        });
+
+        if (error) {
+            console.error("Error al conectar con Supabase:", error.message);
+            alert("No se pudo iniciar sesión: " + error.message);
+        }
+    } catch (err) {
+        console.error("Error en el código:", err);
+    }
 }
 
 /* CARGAR PRODUCTOS */

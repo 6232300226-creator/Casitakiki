@@ -70,37 +70,41 @@ function eliminarDelCarrito(index) {
 }
 
 /* ACTUALIZAR UI */
+/* ACTUALIZAR UI */
 function actualizarVistaCarrito() {
-
     const items = document.getElementById("cart-items");
     const totalElement = document.getElementById("cart-total");
     const countElement = document.getElementById("cart-count");
+
+    // Escudo: Si falta algún elemento en el HTML, avisa en consola pero no congela la página
+    if (!items || !totalElement || !countElement) {
+        console.error("Falta un elemento del carrito en el HTML");
+        return; 
+    }
 
     items.innerHTML = "";
     total = 0;
 
     if (cart.length === 0) {
-        items.innerHTML = '<p class="empty-msg">Tu carrito está vacío</p>';
+        items.innerHTML = '<p class="empty-msg" style="text-align: center; color: #a0848d;">Tu carrito está vacío 🌸</p>';
+    } else {
+        cart.forEach((item, index) => {
+            const subtotal = item.precio * item.cantidad;
+            total += subtotal;
+
+            items.innerHTML += `
+            <div class="cart-item">
+                <span>${item.nombre} (x${item.cantidad})</span>
+                <span>$${subtotal.toFixed(2)}</span>
+                <button onclick="eliminarDelCarrito(${index})">❌</button>
+            </div>
+            `;
+        });
     }
-
-    cart.forEach((item, index) => {
-
-        const subtotal = item.precio * item.cantidad;
-        total += subtotal;
-
-        items.innerHTML += `
-        <div class="cart-item">
-            <span>${item.nombre} x${item.cantidad}</span>
-            <span>$${subtotal.toFixed(2)}</span>
-            <button onclick="eliminarDelCarrito(${index})">🗑️</button>
-        </div>
-        `;
-    });
 
     totalElement.innerText = total.toFixed(2);
     countElement.innerText = cart.length;
 }
-
 /* BOTON PAGAR */
 function irAPagar() {
 

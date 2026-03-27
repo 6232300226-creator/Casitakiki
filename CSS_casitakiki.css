@@ -232,41 +232,11 @@ footer {
     color: #a0848d;
 }
 
-.pago-container {
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    max-width: 400px;
-    margin: 50px auto;
-}
+/* =========================
+   CARRITO DE COMPRAS (CORREGIDO)
+========================= */
 
-.pago-container input {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ffc1d6;
-    border-radius: 10px;
-    box-sizing: border-box; 
-}
-
-.pago-detalles {
-    display: flex;
-    gap: 10px;
-}
-
-.btn-pagar-ahora {
-    width: 100%;
-    background: #ff6b9d;
-    color: white;
-    border: none;
-    padding: 15px;
-    border-radius: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 20px;
-}
-
+/* Icono carrito */
 #cart-icon {
     position: fixed;
     top: 90px;
@@ -280,26 +250,30 @@ footer {
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
+/* Panel carrito */
 #shopping-cart {
     position: fixed;
     top: 0;
     right: 0;
-    width: 350px;
-    height: 100%;
+    width: 100%;
+    max-width: 360px;
+    height: 100vh;
     background: white;
     box-shadow: -5px 0 15px rgba(0,0,0,0.1);
     z-index: 3000;
-    transition: transform 0.4s ease;
-    padding: 20px;
     display: flex;
     flex-direction: column;
+    transition: transform 0.3s ease;
+    box-sizing: border-box;
 }
 
 .cart-hidden {
-    transform: translateX(100%); 
+    transform: translateX(100%);
 }
 
+/* Header */
 .cart-header {
+    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -309,130 +283,24 @@ footer {
 .close-btn {
     background: none;
     border: none;
-    font-size: 2rem;
+    font-size: 1.6rem;
     cursor: pointer;
     color: #ff6b9d;
 }
 
+/* Items */
 #cart-items {
-    flex-grow: 1;
+    flex: 1;
     overflow-y: auto;
-    margin-top: 20px;
-}
-
-.cart-footer {
-    border-top: 2px solid #fff0f5;
-    padding-top: 20px;
+    padding: 15px;
 }
 
 .cart-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    font-size: 0.9rem;
-}
-
-.delete-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.1rem;
-    padding: 5px;
-    transition: transform 0.2s;
-}
-
-.delete-btn:hover {
-    transform: scale(1.2);
-}
-
-.empty-msg {
-    text-align: center;
-    color: #aaa;
-    margin-top: 30px;
-}
-
-.cart-footer {
-    border-top: 2px solid #fff0f5;
-    padding: 20px; /* Le damos aire para que el botón no toque las orillas */
-    background: white;
-}
-
-.btn-checkout {
-    width: 100%; /* Ocupa el ancho disponible */
-    box-sizing: border-box; /* ¡ESTO ES LO MÁS IMPORTANTE! */
-    background: #ff6b9d;
-    color: white;
-    border: none;
-    padding: 15px;
-    border-radius: 50px;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(255, 107, 157, 0.3);
-    transition: 0.3s;
-}
-
-.btn-checkout:hover {
-    background: #ff4d88;
-    transform: translateY(-2px);
-}
-
-
-#cart-icon {
-    position: fixed;
-    top: 90px;
-    right: 20px;
-    background: #ff6b9d;
-    color: white;
-    padding: 15px;
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 2000;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-#shopping-cart {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 100%;
-    max-width: 350px;
-    height: 100%;
-    background: white;
-    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-    z-index: 3000;
-    transition: transform 0.4s ease;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box; /* Evita que los elementos se salgan */
-}
-
-.cart-hidden { transform: translateX(100%); }
-
-.cart-header {
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #fff0f5;
-}
-
-#cart-items {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 20px;
-}
-
-/* Estilo para cada producto dentro del carrito */
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #fef0f5;
+    padding: 10px 0;
+    border-bottom: 1px solid #f3f3f3;
 }
 
 .delete-btn {
@@ -442,10 +310,11 @@ footer {
     font-size: 1.2rem;
 }
 
+/* Footer */
 .cart-footer {
-    padding: 20px;
-    background: #fffafc;
+    padding: 15px;
     border-top: 2px solid #fff0f5;
+    background: #fffafc;
 }
 
 .total-container {
@@ -454,16 +323,27 @@ footer {
     margin-bottom: 15px;
 }
 
+/* Botón checkout */
 .btn-checkout {
     width: 100%;
     box-sizing: border-box;
     background: #ff6b9d;
     color: white;
     border: none;
-    padding: 15px;
-    border-radius: 50px;
+    padding: 14px;
+    border-radius: 40px;
     font-weight: bold;
     cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-checkout:hover {
+    background: #ff4d88;
+}
+
+/* PayPal */
+#paypal-button-container {
+    margin-top: 15px;
 }
 
 /* Tamaño de los iconos de redes sociales */

@@ -1,32 +1,51 @@
 const _supabase = window.supabase.createClient(
-'https://uhahtlotlhzaxsdgarqc.supabase.co',
-'sb_publishable_fa8XDuQxlbIIqDgimkmvdg_LUDm1wGf'
+    'https://uhahtlotlhzaxsdgarqc.supabase.co',
+    'sb_publishable_fa8XDuQxlbIIqDgimkmvdg_LUDm1wGf'
 );
 
 let cart = [];
 let total = 0;
 let paypalRendered = false;
 
-/* LOGIN GOOGLE */
+/* =========================================
+   LOGIN GOOGLE
+========================================= */
 async function loginWithGoogle() {
-    const { error } = await _supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: { redirectTo: window.location.href }
-    });
+    console.log("¡Hiciste clic en el botón de Google!");
+    try {
+        const { data, error } = await _supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: { redirectTo: window.location.origin }
+        });
+
+        if (error) {
+            console.error("Error al conectar con Supabase:", error.message);
+            alert("No se pudo iniciar sesión: " + error.message);
+        }
+    } catch (err) {
+        console.error("Error en el código:", err);
+    }
 }
 
-/* CARGAR PRODUCTOS */
+/* =========================================
+   CARGAR PRODUCTOS
+========================================= */
 async function cargarProductos() {
     const { data, error } = await _supabase.from('productos').select('*');
-    if (error) return;
+    if (error) {
+        console.error("Error al cargar productos:", error);
+        return;
+    }
 
     const contenedor = document.querySelector('.grid-productos');
+    if (!contenedor) return;
+    
     contenedor.innerHTML = '';
 
     data.forEach(prod => {
         contenedor.innerHTML += `
         <article class="card">
-            <img src="${prod.imagen_url}">
+            <img src="${prod.imagen_url}" alt="${prod.nombre}">
             <h3>${prod.nombre}</h3>
             <p class="precio">$${Number(prod.precio).toFixed(2)}</p>
             <button class="btn-comprar"
@@ -38,16 +57,13 @@ async function cargarProductos() {
     });
 }
 
-// ==========================================
-// LÓGICA DEL CARRITO (A PRUEBA DE ERRORES)
-// ==========================================
-
+/* =========================================
+   LÓGICA DEL CARRITO
+========================================= */
 function toggleCart() {
     const cartPanel = document.getElementById("shopping-cart");
     if(cartPanel) {
         cartPanel.classList.toggle("cart-hidden");
-    } else {
-        console.error("Falta el <aside id='shopping-cart'> en tu HTML");
     }
 }
 
@@ -66,7 +82,6 @@ function agregarAlCarrito(nombre, precio) {
     
     actualizarVistaCarrito();
     
-    // Forzar a que se abra el carrito al agregar
     const cartPanel = document.getElementById("shopping-cart");
     if(cartPanel) {
         cartPanel.classList.remove("cart-hidden");
@@ -83,11 +98,7 @@ function actualizarVistaCarrito() {
     const totalElement = document.getElementById("cart-total");
     const countElement = document.getElementById("cart-count");
 
-    // Si falta el contenedor de items, detenemos la función para no romper la página
-    if (!items || !totalElement) {
-        console.error("Falta #cart-items o #cart-total en el HTML.");
-        return;
-    }
+    if (!items || !totalElement) return;
 
     items.innerHTML = "";
     total = 0;
@@ -99,7 +110,6 @@ function actualizarVistaCarrito() {
             const subtotal = item.precio * item.cantidad;
             total += subtotal;
 
-            // Inyectamos los productos con estilos directos por si falla el CSS
             items.innerHTML += `
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #ffe4ed; color: #854d5f; font-weight: bold;">
                 <span>${item.nombre} (x${item.cantidad})</span>
@@ -112,14 +122,15 @@ function actualizarVistaCarrito() {
 
     totalElement.innerText = total.toFixed(2);
     
-    // Solo actualiza el numerito del icono si el icono existe
     if (countElement) {
         countElement.innerText = cart.length;
     }
+}
 
-/* BOTON PAGAR */
+/* =========================================
+   PAGOS (PAYPAL) Y VENTAS
+========================================= */
 function irAPagar() {
-
     if (cart.length === 0) {
         alert("Tu carrito está vacío");
         return;
@@ -134,11 +145,8 @@ function irAPagar() {
     }
 }
 
-/* PAYPAL */
 function renderPaypal() {
-
     paypal.Buttons({
-
         createOrder: function(data, actions) {
             return actions.order.create({
                 purchase_units: [{
@@ -148,38 +156,51 @@ function renderPaypal() {
                 }]
             });
         },
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+                alert("Pago completado por " + details.payer.name.given_name);
+                
+                registrarVenta(total);
 
-       onApprove: function(data, actions) {
-    return actions.order.capture().then(function(details) {
+                cart = [];
+                total = 0;
+                paypalRendered = false;
 
-        alert("Pago completado por " + details.payer.name.given_name);
+                actualizarVistaCarrito();
 
-        registrarVenta(total);
+                document.getElementById("paypal-button-container").innerHTML = "";
+                document.getElementById("paypal-button-container").style.display = "none";
+                document.getElementById("finalizar-compra").style.display = "block";
 
-        cart = [];
-        total = 0;
-        paypalRendered = false;
-
-        actualizarVistaCarrito();
-
-        document.getElementById("paypal-button-container").innerHTML = "";
-        document.getElementById("paypal-button-container").style.display = "none";
-        document.getElementById("finalizar-compra").style.display = "block";
-
-        // 👇 CERRAR CARRITO
-        document.getElementById("shopping-cart")
-            .classList.add("cart-hidden");
-    });
-}
-
+                const cartPanel = document.getElementById("shopping-cart");
+                if(cartPanel) {
+                    cartPanel.classList.add("cart-hidden");
+                }
+            });
+        }
     }).render('#paypal-button-container');
 }
 
-/* GUARDAR VENTA */
-async function registrarVenta(total) {
-    await _supabase.from('ventas').insert([
-        { total: total, metodo_pago: 'PayPal' }
-    ]);
+async function registrarVenta(totalVenta) {
+    try {
+        await _supabase.from('ventas').insert([
+            { total: totalVenta, metodo_pago: 'PayPal' }
+        ]);
+    } catch (error) {
+        console.error("Error al guardar en Supabase:", error);
+    }
 }
 
-document.addEventListener("DOMContentLoaded", cargarProductos);
+/* =========================================
+   INICIALIZAR AL CARGAR LA PÁGINA
+========================================= */
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Cargar productos
+    cargarProductos();
+
+    // 2. Conectar botón de Google
+    const btnGoogle = document.getElementById("btn-login-google");
+    if (btnGoogle) {
+        btnGoogle.addEventListener("click", loginWithGoogle);
+    }
+});

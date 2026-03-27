@@ -80,9 +80,19 @@
 <!-- SCRIPT PRINCIPAL -->
 <script src="script.js"></script>
 
-<!-- PAYPAL -->
 <script>
-function renderPayPal(totalPaypal){
+function irAPagar() {
+    if (typeof cart === "undefined" || cart.length === 0) {
+        alert("Tu carrito esta vacio!");
+        return;
+    }
+
+    const btn = document.getElementById("finalizar-compra");
+    const paypalContainer = document.getElementById("paypal-button-container");
+
+    btn.style.display = "none";
+    paypalContainer.style.display = "block";
+    paypalContainer.innerHTML = "";
 
     paypal.Buttons({
 
@@ -91,7 +101,7 @@ function renderPayPal(totalPaypal){
                 purchase_units: [{
                     amount: {
                         currency_code: "MXN",
-                        value: totalPaypal.toFixed(2)
+                        value: total.toFixed(2)
                     }
                 }]
             });
@@ -103,29 +113,20 @@ function renderPayPal(totalPaypal){
                 cart = [];
                 total = 0;
                 actualizarVistaCarrito();
-                document.getElementById("paypal-button-container").style.display="none";
+                paypalContainer.style.display = "none";
+                btn.style.display = "block";
             });
+        },
+
+        onError: function(err){
+            console.error(err);
+            alert("Error con PayPal");
         }
 
     }).render("#paypal-button-container");
 }
-
-// sobrescribe tu función irAPagar para usar PayPal
-function irAPagar() {
-    if (cart.length === 0) {
-        alert("Tu carrito esta vacio!");
-        return;
-    }
-
-    document.getElementById("finalizar-compra").style.display = "none";
-
-    const paypalContainer = document.getElementById("paypal-button-container");
-    paypalContainer.style.display = "block";
-
-    paypalContainer.innerHTML = "";
-    renderPayPal(total);
-}
 </script>
+
 
 </body>
 </html>

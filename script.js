@@ -3,135 +3,105 @@ const _supabase = window.supabase.createClient(
 'sb_publishable_fa8XDuQxlbIIqDgimkmvdg_LUDm1wGf'
 );
 
-// carrito
 let cart = [];
 let total = 0;
+let paypalRendered = false;
 
+/* LOGIN GOOGLE */
 async function loginWithGoogle() {
     const { error } = await _supabase.auth.signInWithOAuth({
         provider: 'google',
         options: { redirectTo: window.location.href }
     });
-    if (error) {
-        console.error('Error:', error.message);
-        alert('Error al iniciar sesion con Google');
-    }
 }
 
-function actualizarBotonUsuario(user) {
-    const btn = document.getElementById('btn-login-google');
-    if (!btn) return;
-
-    const nombre = user.user_metadata.full_name || user.email;
-    btn.textContent = '👋 ' + nombre;
-
-    btn.onclick = async function() {
-        await _supabase.auth.signOut();
-        btn.textContent = '🔐 Iniciar con Google';
-        btn.onclick = loginWithGoogle;
-    };
-}
-
-async function verificarSesion() {
-    const result = await _supabase.auth.getSession();
-    if (result.data.session) {
-        actualizarBotonUsuario(result.data.session.user);
-    }
-}
-
-_supabase.auth.onAuthStateChange(function(event, session) {
-    if (session) {
-        actualizarBotonUsuario(session.user);
-    }
-});
-
-var btnLogin = document.getElementById('btn-login-google');
-if (btnLogin) {
-    btnLogin.addEventListener('click', loginWithGoogle);
-}
-
-verificarSesion();
-
+/* CARGAR PRODUCTOS */
 async function cargarProductos() {
-    const result = await _supabase.from('productos').select('*');
+    const { data, error } = await _supabase.from('productos').select('*');
+    if (error) return;
 
-    if (result.error) {
-        console.error('Error al cargar productos:', result.error);
-        return;
-    }
-
-    var productos = result.data;
-    var contenedor = document.querySelector('.grid-productos');
-
-    if (!contenedor) return;
-
+    const contenedor = document.querySelector('.grid-productos');
     contenedor.innerHTML = '';
 
-    productos.forEach(function(prod) {
+    data.forEach(prod => {
         contenedor.innerHTML += `
-            <article class="card">
-                <img src="${prod.imagen_url}">
-                <h3>${prod.nombre}</h3>
-                <p class="precio">$${Number(prod.precio).toFixed(2)}</p>
-                <button class="btn-comprar"
-                    onclick="agregarAlCarrito('${prod.nombre}', ${prod.precio})">
-                    Añadir al carrito
-                </button>
-            </article>
+        <article class="card">
+            <img src="${prod.imagen_url}">
+            <h3>${prod.nombre}</h3>
+            <p class="precio">$${Number(prod.precio).toFixed(2)}</p>
+            <button class="btn-comprar"
+            onclick="agregarAlCarrito('${prod.nombre}', ${prod.precio})">
+            Añadir al carrito
+            </button>
+        </article>
         `;
     });
 }
 
+/* ABRIR / CERRAR CARRITO */
 function toggleCart() {
-    document.getElementById('shopping-cart')
-        .classList.toggle('cart-hidden');
+    const cartPanel = document.getElementById("shopping-cart");
+    cartPanel.classList.toggle("cart-hidden");
 }
 
+/* AGREGAR PRODUCTO */
 function agregarAlCarrito(nombre, precio) {
-    cart.push({ nombre, precio: Number(precio) });
-    total += Number(precio);
-    actualizarVistaCarrito();
 
-    document.getElementById('shopping-cart')
-        .classList.remove('cart-hidden');
+    const existente = cart.find(p => p.nombre === nombre);
+
+    if (existente) {
+        existente.cantidad += 1;
+    } else {
+        cart.push({
+            nombre,
+            precio: Number(precio),
+            cantidad: 1
+        });
+    }
+
+    actualizarVistaCarrito();
+    document.getElementById("shopping-cart").classList.remove("cart-hidden");
 }
 
+/* ELIMINAR */
 function eliminarDelCarrito(index) {
-    total -= cart[index].precio;
     cart.splice(index, 1);
     actualizarVistaCarrito();
 }
 
+/* ACTUALIZAR UI */
 function actualizarVistaCarrito() {
-    const itemsContainer = document.getElementById('cart-items');
-    const totalElement = document.getElementById('cart-total');
-    const countElement = document.getElementById('cart-count');
 
-    itemsContainer.innerHTML = '';
+    const items = document.getElementById("cart-items");
+    const totalElement = document.getElementById("cart-total");
+    const countElement = document.getElementById("cart-count");
+
+    items.innerHTML = "";
+    total = 0;
 
     if (cart.length === 0) {
-        itemsContainer.innerHTML =
-            '<p class="empty-msg">Tu carrito está vacío</p>';
-        total = 0;
-    } else {
-        cart.forEach((item, index) => {
-            itemsContainer.innerHTML += `
-                <div class="cart-item">
-                    <span>${item.nombre} - $${item.precio.toFixed(2)}</span>
-                    <button class="delete-btn"
-                        onclick="eliminarDelCarrito(${index})">
-                        🗑️
-                    </button>
-                </div>
-            `;
-        });
+        items.innerHTML = '<p class="empty-msg">Tu carrito está vacío</p>';
     }
+
+    cart.forEach((item, index) => {
+
+        const subtotal = item.precio * item.cantidad;
+        total += subtotal;
+
+        items.innerHTML += `
+        <div class="cart-item">
+            <span>${item.nombre} x${item.cantidad}</span>
+            <span>$${subtotal.toFixed(2)}</span>
+            <button onclick="eliminarDelCarrito(${index})">🗑️</button>
+        </div>
+        `;
+    });
 
     totalElement.innerText = total.toFixed(2);
     countElement.innerText = cart.length;
 }
 
-/* BOTON FINALIZAR COMPRA */
+/* BOTON PAGAR */
 function irAPagar() {
 
     if (cart.length === 0) {
@@ -142,10 +112,13 @@ function irAPagar() {
     document.getElementById("finalizar-compra").style.display = "none";
     document.getElementById("paypal-button-container").style.display = "block";
 
-    renderPaypal();
+    if (!paypalRendered) {
+        renderPaypal();
+        paypalRendered = true;
+    }
 }
 
-/* RENDER PAYPAL */
+/* PAYPAL */
 function renderPaypal() {
 
     paypal.Buttons({
@@ -169,27 +142,24 @@ function renderPaypal() {
 
                 cart = [];
                 total = 0;
+                paypalRendered = false;
+
                 actualizarVistaCarrito();
 
                 document.getElementById("paypal-button-container").innerHTML = "";
                 document.getElementById("paypal-button-container").style.display = "none";
                 document.getElementById("finalizar-compra").style.display = "block";
-
             });
-        },
-
-        onError: function(err) {
-            console.error(err);
-            alert("Error con PayPal");
         }
 
-    }).render("#paypal-button-container");
+    }).render('#paypal-button-container');
 }
 
-async function registrarVenta(montoTotal) {
+/* GUARDAR VENTA */
+async function registrarVenta(total) {
     await _supabase.from('ventas').insert([
-        { total: montoTotal, metodo_pago: 'PayPal' }
+        { total: total, metodo_pago: 'PayPal' }
     ]);
 }
 
-document.addEventListener('DOMContentLoaded', cargarProductos);
+document.addEventListener("DOMContentLoaded", cargarProductos);

@@ -1,5 +1,5 @@
 const _supabase = window.supabase.createClient(
-    'https://uhahtlotlhzaxsdgarqc.supabase.co',
+' https://uhahtlotlhzaxsdgarqc.supabase.co',
     'sb_publishable_fa8XDuQxlbIIqDgimkmvdg_LUDm1wGf'
 );
 
@@ -100,17 +100,6 @@ function eliminarDelCarrito(index) {
     if (total < 0) total = 0;
     cart.splice(index, 1);
     actualizarVistaCarrito();
-
-    // Si se vacía el carrito mientras PayPal está visible, regresa al botón normal
-    if (cart.length === 0) {
-        var paypalContainer = document.getElementById('paypal-button-container');
-        var btnCompra = document.getElementById('finalizar-compra');
-        if (paypalContainer) {
-            paypalContainer.style.display = 'none';
-            paypalContainer.innerHTML = '';
-        }
-        if (btnCompra) btnCompra.style.display = 'block';
-    }
 }
 
 function actualizarVistaCarrito() {
@@ -141,95 +130,18 @@ function irAPagar() {
         alert("Tu carrito esta vacio!");
         return;
     }
-
     var btnCompra = document.getElementById('finalizar-compra');
     var paypalContainer = document.getElementById('paypal-button-container');
-
     if (btnCompra) btnCompra.style.display = 'none';
-    if (paypalContainer) {
-        paypalContainer.style.display = 'block';
-        paypalContainer.innerHTML = ''; // limpia botones anteriores
-    }
-
-    // Calcula el total actual del carrito
-    var totalPago = cart.reduce(function(sum, item) {
-        return sum + item.precio;
-    }, 0);
-
-    paypal.Buttons({
-
-        createOrder: function(data, actions) {
-            return actions.order.create({
-                purchase_units: [{
-                    description: "Compra en La Casita de Kiki",
-                    amount: {
-                        currency_code: "MXN",
-                        value: totalPago.toFixed(2),
-                        breakdown: {
-                            item_total: {
-                                currency_code: "MXN",
-                                value: totalPago.toFixed(2)
-                            }
-                        }
-                    },
-                    items: cart.map(function(item) {
-                        return {
-                            name: item.nombre,
-                            quantity: "1",
-                            unit_amount: {
-                                currency_code: "MXN",
-                                value: Number(item.precio).toFixed(2)
-                            }
-                        };
-                    })
-                }]
-            });
-        },
-
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(detalles) {
-                // Muestra mensaje de éxito dentro del carrito
-                paypalContainer.innerHTML =
-                    '<div style="background:#e6f4ea; color:#2e7d32; padding:14px; border-radius:6px; text-align:center; font-family:sans-serif;">' +
-                    '✅ ¡Pago completado!<br>' +
-                    'Gracias, <strong>' + detalles.payer.name.given_name + '</strong> 🌸<br>' +
-                    '<small>ID: ' + detalles.id + '</small>' +
-                    '</div>';
-
-                // Registra la venta en Supabase
-                registrarVenta(totalPago);
-
-                // Vacía el carrito
-                cart = [];
-                total = 0;
-                actualizarVistaCarrito();
-            });
-        },
-
-        onCancel: function() {
-            // Regresa al botón original si cancela
-            paypalContainer.style.display = 'none';
-            paypalContainer.innerHTML = '';
-            if (btnCompra) btnCompra.style.display = 'block';
-        },
-
-        onError: function(err) {
-            alert("Ocurrió un error con PayPal. Intenta de nuevo.");
-            console.error(err);
-            paypalContainer.style.display = 'none';
-            paypalContainer.innerHTML = '';
-            if (btnCompra) btnCompra.style.display = 'block';
-        }
-
-    }).render('#paypal-button-container');
+    if (paypalContainer) paypalContainer.style.display = 'block';
 }
 
 async function registrarVenta(montoTotal) {
     const result = await _supabase.from('ventas').insert([{ total: montoTotal, metodo_pago: 'PayPal' }]);
     if (result.error) {
-        console.error("Error al guardar la venta:", result.error);
+        alert("Error al guardar la venta");
     } else {
-        console.log("Venta registrada en Supabase ✅");
+        alert("Venta guardada!");
     }
 }
 

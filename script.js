@@ -121,7 +121,7 @@ function actualizarVistaCarrito() {
                 <button onclick="eliminarDelCarrito(${index})" style="background: #ffc1d6; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; color: white;">✖</button>
             </div>
             `;
-        );
+        } );
     }
 
     totalElement.innerText = total.toFixed(2);
@@ -130,7 +130,7 @@ function actualizarVistaCarrito() {
     if (countElement) {
         countElement.innerText = cart.length;
     }
-}}
+}
 /* BOTON PAGAR */
 function irAPagar() {
 

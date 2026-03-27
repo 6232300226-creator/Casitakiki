@@ -236,21 +236,7 @@ footer {
    CARRITO DE COMPRAS (CORREGIDO)
 ========================= */
 
-/* Icono carrito */
-#cart-icon {
-    position: fixed;
-    top: 90px;
-    right: 20px;
-    background: #ff6b9d;
-    color: white;
-    padding: 15px;
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 2000;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-/* Panel carrito */
+/* Asegura que el carrito use toda la altura */
 #shopping-cart {
     position: fixed;
     top: 0;
@@ -263,87 +249,42 @@ footer {
     z-index: 3000;
     display: flex;
     flex-direction: column;
-    transition: transform 0.3s ease;
-    box-sizing: border-box;
 }
 
-.cart-hidden {
-    transform: translateX(100%);
-}
-
-/* Header */
-.cart-header {
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #fff0f5;
-}
-
-.close-btn {
-    background: none;
-    border: none;
-    font-size: 1.6rem;
-    cursor: pointer;
-    color: #ff6b9d;
-}
-
-/* Items */
+/* Hace que los items ocupen el espacio disponible */
 #cart-items {
     flex: 1;
     overflow-y: auto;
     padding: 15px;
 }
 
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #f3f3f3;
-}
-
-.delete-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-}
-
-/* Footer */
+/* Footer siempre visible abajo */
 .cart-footer {
     padding: 15px;
     border-top: 2px solid #fff0f5;
     background: #fffafc;
+    position: sticky;
+    bottom: 0;
 }
 
-.total-container {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-
-/* Botón checkout */
+/* Botón pagar visible */
 .btn-checkout {
     width: 100%;
+    display: block;
     box-sizing: border-box;
     background: #ff6b9d;
     color: white;
     border: none;
-    padding: 14px;
+    padding: 15px;
     border-radius: 40px;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.2s;
 }
 
-.btn-checkout:hover {
-    background: #ff4d88;
-}
-
-/* PayPal */
+/* contenedor paypal */
 #paypal-button-container {
-    margin-top: 15px;
+    margin-top: 10px;
+    width: 100%;
 }
 
 /* Tamaño de los iconos de redes sociales */

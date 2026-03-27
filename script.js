@@ -1,7 +1,11 @@
 const _supabase = window.supabase.createClient(
-' https://uhahtlotlhzaxsdgarqc.supabase.co',
-    'sb_publishable_fa8XDuQxlbIIqDgimkmvdg_LUDm1wGf'
+'https://uhahtlotlhzaxsdgarqc.supabase.co',
+'sb_publishable_fa8XDuQxlbIIqDgimkmvdg_LUDm1wGf'
 );
+
+// ✅ variables del carrito (solo una vez)
+let cart = [];
+let total = 0;
 
 async function loginWithGoogle() {
     const { error } = await _supabase.auth.signInWithOAuth({
@@ -45,8 +49,6 @@ if (btnLogin) {
 }
 
 verificarSesion();
-
-
 
 async function cargarProductos() {
     console.log("Cargando productos desde Supabase...");

@@ -11,19 +11,53 @@ let paypalRendered = false;
    LOGIN GOOGLE
 ========================================= */
 async function loginWithGoogle() {
-    console.log("¡Hiciste clic en el botón de Google!");
-    try {
-        const { data, error } = await _supabase.auth.signInWithOAuth({
-            provider: 'google',
-            options: { redirectTo: window.location.origin }
-        });
+    const { data, error } = await _supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: 'https://6232300226-creator.github.io/Casitakiki/' }
+    });
+    if (error) alert("No se pudo iniciar sesión: " + error.message);
+}
 
-        if (error) {
-            console.error("Error al conectar con Supabase:", error.message);
-            alert("No se pudo iniciar sesión: " + error.message);
+async function cerrarSesion() {
+    await _supabase.auth.signOut();
+    location.reload();
+}
+
+async function guardarUsuarioEnDB(user) {
+    const { error } = await _supabase.from('usuarios').upsert([
+        {
+            id: user.id,
+            nombre: user.user_metadata?.full_name || '',
+            email: user.email,
+            avatar: user.user_metadata?.avatar_url || ''
         }
-    } catch (err) {
-        console.error("Error en el código:", err);
+    ], { onConflict: 'id' });
+
+    if (error) console.error("Error al guardar usuario:", error.message);
+}
+
+function actualizarBotonLogin(user) {
+    const btn = document.getElementById("btn-login-google");
+    if (!btn) return;
+
+    if (user) {
+        const nombre = user.user_metadata?.full_name || user.email;
+        const avatar = user.user_metadata?.avatar_url;
+
+        btn.outerHTML = `
+            <div id="user-info" style="display:flex; align-items:center; gap:10px;">
+                ${avatar ? `<img src="${avatar}" style="width:32px; height:32px; border-radius:50%; border:2px solid #ff9dbf;">` : ''}
+                <span style="color:#854d5f; font-weight:bold; font-size:0.9rem;">
+                    Hola, ${nombre.split(' ')[0]} 🌸
+                </span>
+                <button onclick="cerrarSesion()"
+                    style="background:#ffc1d6; border:none; padding:6px 14px; border-radius:20px;
+                           cursor:pointer; font-weight:bold; color:#854d5f;
+                           font-family:'Quicksand',sans-serif; transition:0.3s;">
+                    Salir
+                </button>
+            </div>
+        `;
     }
 }
 
@@ -39,7 +73,7 @@ async function cargarProductos() {
 
     const contenedor = document.querySelector('.grid-productos');
     if (!contenedor) return;
-    
+
     contenedor.innerHTML = '';
 
     data.forEach(prod => {
@@ -62,28 +96,28 @@ async function cargarProductos() {
 ========================================= */
 function toggleCart() {
     const cartPanel = document.getElementById("shopping-cart");
-    if(cartPanel) {
+    if (cartPanel) {
         cartPanel.classList.toggle("cart-hidden");
     }
 }
 
 function agregarAlCarrito(nombre, precio) {
     const existente = cart.find(p => p.nombre === nombre);
-    
+
     if (existente) {
         existente.cantidad += 1;
     } else {
-        cart.push({ 
-            nombre: nombre, 
-            precio: Number(precio), 
-            cantidad: 1 
+        cart.push({
+            nombre: nombre,
+            precio: Number(precio),
+            cantidad: 1
         });
     }
-    
+
     actualizarVistaCarrito();
-    
+
     const cartPanel = document.getElementById("shopping-cart");
-    if(cartPanel) {
+    if (cartPanel) {
         cartPanel.classList.remove("cart-hidden");
     }
 }
@@ -121,7 +155,7 @@ function actualizarVistaCarrito() {
     }
 
     totalElement.innerText = total.toFixed(2);
-    
+
     if (countElement) {
         countElement.innerText = cart.length;
     }
@@ -159,7 +193,7 @@ function renderPaypal() {
         onApprove: function(data, actions) {
             return actions.order.capture().then(function(details) {
                 alert("Pago completado por " + details.payer.name.given_name);
-                
+
                 registrarVenta(total);
 
                 cart = [];
@@ -173,7 +207,7 @@ function renderPaypal() {
                 document.getElementById("finalizar-compra").style.display = "block";
 
                 const cartPanel = document.getElementById("shopping-cart");
-                if(cartPanel) {
+                if (cartPanel) {
                     cartPanel.classList.add("cart-hidden");
                 }
             });
@@ -194,13 +228,25 @@ async function registrarVenta(totalVenta) {
 /* =========================================
    INICIALIZAR AL CARGAR LA PÁGINA
 ========================================= */
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     // 1. Cargar productos
     cargarProductos();
 
-    // 2. Conectar botón de Google
-    const btnGoogle = document.getElementById("btn-login-google");
-    if (btnGoogle) {
-        btnGoogle.addEventListener("click", loginWithGoogle);
+    // 2. Verificar si ya hay sesión activa (al volver del redirect de Google)
+    const { data: { session } } = await _supabase.auth.getSession();
+    if (session?.user) {
+        actualizarBotonLogin(session.user);
+        guardarUsuarioEnDB(session.user);
+    } else {
+        const btn = document.getElementById("btn-login-google");
+        if (btn) btn.addEventListener("click", loginWithGoogle);
     }
+
+    // 3. Escuchar cambios de sesión en tiempo real
+    _supabase.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN' && session?.user) {
+            actualizarBotonLogin(session.user);
+            guardarUsuarioEnDB(session.user);
+        }
+    });
 });

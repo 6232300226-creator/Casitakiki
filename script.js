@@ -48,7 +48,7 @@ function actualizarBotonLogin(user) {
             <div id="user-info" style="display:flex; align-items:center; gap:10px;">
                 ${avatar ? `<img src="${avatar}" style="width:32px; height:32px; border-radius:50%; border:2px solid #ff9dbf;">` : ''}
                 <span style="color:#854d5f; font-weight:bold; font-size:0.9rem;">
-                    Hola, ${nombre.split(' ')[0]} 🌸
+                    Hola, ${nombre.split(' ')[0]} 
                 </span>
                 <button onclick="cerrarSesion()"
                     style="background:#ffc1d6; border:none; padding:6px 14px; border-radius:20px;

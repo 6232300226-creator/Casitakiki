@@ -418,3 +418,68 @@ footer {
     cursor: pointer;
     padding: 0 10px;
 }
+
+#filtros {
+  padding: 1rem 2rem;
+  background: #fffafc;
+}
+
+.filtros-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+#buscador {
+  padding: 8px 14px;
+  border: 1.5px solid #ffc0d9;
+  border-radius: 999px;
+  font-size: 14px;
+  outline: none;
+  flex: 1;
+  min-width: 180px;
+}
+
+.chips-categorias {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chip-cat {
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1.5px solid #ffc0d9;
+  background: white;
+  color: #854d5f;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.chip-cat.active,
+.chip-cat:hover {
+  background: #ff6b9d;
+  color: white;
+  border-color: #ff6b9d;
+}
+
+.filtro-precio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #854d5f;
+}
+
+#ordenar {
+  padding: 6px 12px;
+  border: 1.5px solid #ffc0d9;
+  border-radius: 8px;
+  color: #854d5f;
+  font-size: 13px;
+  cursor: pointer;
+}

@@ -250,3 +250,62 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 });
+
+
+// Variables de estado de filtros
+let categoriaActiva = 'todos';
+let precioMax = 1000;
+
+// Cuando cargues productos de Supabase, guárdalos aquí:
+let todosLosProductos = [];
+
+// Llama esto después de obtener productos de Supabase
+function guardarYRenderizar(productos) {
+  todosLosProductos = productos;
+  aplicarFiltros();
+}
+
+function filtrarCategoria(cat, btn) {
+  categoriaActiva = cat;
+  document.querySelectorAll('.chip-cat').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  aplicarFiltros();
+}
+
+function actualizarPrecio(val) {
+  precioMax = Number(val);
+  document.getElementById('precio-label').textContent = '$' + val;
+  aplicarFiltros();
+}
+
+function aplicarFiltros() {
+  const busqueda = document.getElementById('buscador').value.toLowerCase();
+  const orden = document.getElementById('ordenar').value;
+
+  let resultado = todosLosProductos.filter(p => {
+    const matchCat = categoriaActiva === 'todos' || p.categoria === categoriaActiva;
+    const matchPrecio = p.precio <= precioMax;
+    const matchBusqueda = p.nombre.toLowerCase().includes(busqueda);
+    return matchCat && matchPrecio && matchBusqueda;
+  });
+
+  if (orden === 'precio-asc') resultado.sort((a, b) => a.precio - b.precio);
+  else if (orden === 'precio-desc') resultado.sort((a, b) => b.precio - a.precio);
+  else if (orden === 'nombre') resultado.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+  renderizarProductos(resultado);
+}
+
+function renderizarProductos(lista) {
+  const grid = document.querySelector('.grid-productos');
+  grid.innerHTML = lista.length === 0
+    ? '<p style="text-align:center; color:#a0848d; padding: 2rem;">No se encontraron productos 🌸</p>'
+    : lista.map(p => `
+        <div class="producto-card">
+          <img src="${p.imagen}" alt="${p.nombre}" />
+          <h3>${p.nombre}</h3>
+          <p class="precio">$${p.precio.toFixed(2)}</p>
+          <button onclick="agregarAlCarrito(${p.id})">Agregar 🛒</button>
+        </div>
+      `).join('');
+}

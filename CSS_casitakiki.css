@@ -533,3 +533,7 @@ footer {
     font-weight: bold;
     font-size: 1.1rem;
 }
+
+.whatsapp-link {
+    color: #25d366 !important; /* Esto lo forzará a verde WhatsApp */
+}

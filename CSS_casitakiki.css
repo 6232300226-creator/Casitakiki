@@ -494,6 +494,10 @@ footer {
     margin: 20px 0;
 }
 
+.footer-contact-item {
+    margin: 20px 0;
+}
+
 .whatsapp-link {
     display: inline-flex;
     align-items: center;
@@ -502,6 +506,9 @@ footer {
     transition: transform 0.3s ease;
 }
 
+.whatsapp-link:hover {
+    transform: translateY(-2px);
+    color: #25d366; /* Color oficial de WhatsApp */
 }
 
 .icon {
@@ -529,8 +536,4 @@ footer {
 .phone-number {
     font-weight: bold;
     font-size: 1.1rem;
-}
-
-.whatsapp-link {
-    color: #25d366 !important;
 }

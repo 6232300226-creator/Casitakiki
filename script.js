@@ -252,21 +252,28 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 
-// Variables de estado de filtros
-let categoriaActiva = 'todos';
-let precioMax = 1000;
-
-// Cuando cargues productos de Supabase, guárdalos aquí:
+// Variables globales de filtros
 let todosLosProductos = [];
+let categoriaActiva = 0;
+let precioMax = 500;
 
-// Llama esto después de obtener productos de Supabase
-function guardarYRenderizar(productos) {
-  todosLosProductos = productos;
+// Reemplaza tu consulta de Supabase con esta:
+async function cargarProductos() {
+  const { data, error } = await supabase
+    .from('productos')
+    .select('*');
+
+  if (error) {
+    console.error('Error al cargar productos:', error);
+    return;
+  }
+
+  todosLosProductos = data;
   aplicarFiltros();
 }
 
-function filtrarCategoria(cat, btn) {
-  categoriaActiva = cat;
+function filtrarCategoria(catId, btn) {
+  categoriaActiva = catId;
   document.querySelectorAll('.chip-cat').forEach(c => c.classList.remove('active'));
   btn.classList.add('active');
   aplicarFiltros();
@@ -283,7 +290,7 @@ function aplicarFiltros() {
   const orden = document.getElementById('ordenar').value;
 
   let resultado = todosLosProductos.filter(p => {
-    const matchCat = categoriaActiva === 'todos' || p.categoria === categoriaActiva;
+    const matchCat = categoriaActiva === 0 || p.categoria_id === categoriaActiva;
     const matchPrecio = p.precio <= precioMax;
     const matchBusqueda = p.nombre.toLowerCase().includes(busqueda);
     return matchCat && matchPrecio && matchBusqueda;
@@ -298,14 +305,20 @@ function aplicarFiltros() {
 
 function renderizarProductos(lista) {
   const grid = document.querySelector('.grid-productos');
-  grid.innerHTML = lista.length === 0
-    ? '<p style="text-align:center; color:#a0848d; padding: 2rem;">No se encontraron productos 🌸</p>'
-    : lista.map(p => `
-        <div class="producto-card">
-          <img src="${p.imagen}" alt="${p.nombre}" />
-          <h3>${p.nombre}</h3>
-          <p class="precio">$${p.precio.toFixed(2)}</p>
-          <button onclick="agregarAlCarrito(${p.id})">Agregar 🛒</button>
-        </div>
-      `).join('');
+
+  if (lista.length === 0) {
+    grid.innerHTML = '<p style="text-align:center; color:#a0848d; padding:2rem;">No se encontraron productos 🌸</p>';
+    return;
+  }
+
+  grid.innerHTML = lista.map(p => `
+    <div class="producto-card">
+      <img src="${p.imagen_url}" alt="${p.nombre}" />
+      <h3>${p.nombre}</h3>
+      <p class="precio">$${Number(p.precio).toFixed(2)}</p>
+      <button onclick="agregarAlCarrito(${p.id}, '${p.nombre}', ${p.precio})">
+        Agregar 🛒
+      </button>
+    </div>
+  `).join('');
 }

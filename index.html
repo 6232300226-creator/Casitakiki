@@ -60,18 +60,18 @@
     </div>
 </section>
 
-    <section id="filtros">
+<section id="filtros">
   <div class="filtros-container">
     <input type="text" id="buscador" placeholder="Buscar producto... 🔍" oninput="aplicarFiltros()" />
     <div class="chips-categorias">
-      <button class="chip-cat active" onclick="filtrarCategoria('todos', this)">Todos</button>
-      <button class="chip-cat" onclick="filtrarCategoria('Maquillaje', this)">💄 Maquillaje</button>
-      <button class="chip-cat" onclick="filtrarCategoria('Pasteleria', this)">🎂 Pasteles</button>
-      <button class="chip-cat" onclick="filtrarCategoria('Juguetes', this)">🧸 Juguetes</button>
+      <button class="chip-cat active" onclick="filtrarCategoria(0, this)">Todos</button>
+      <button class="chip-cat" onclick="filtrarCategoria(1, this)">💄 Maquillaje</button>
+      <button class="chip-cat" onclick="filtrarCategoria(2, this)">🎂 Pastelería</button>
+      <button class="chip-cat" onclick="filtrarCategoria(3, this)">🧸 Juguetes</button>
     </div>
     <div class="filtro-precio">
-      <label>Precio máx: <strong id="precio-label">$1000</strong></label>
-      <input type="range" id="precio-range" min="0" max="1000" value="1000" step="50" oninput="actualizarPrecio(this.value)" />
+      <label>Precio máx: <strong id="precio-label">$500</strong></label>
+      <input type="range" id="precio-range" min="0" max="500" value="500" step="10" oninput="actualizarPrecio(this.value)" />
     </div>
     <select id="ordenar" onchange="aplicarFiltros()">
       <option value="default">Ordenar por</option>

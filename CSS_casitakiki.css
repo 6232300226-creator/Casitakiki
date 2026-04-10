@@ -489,3 +489,47 @@ footer {
   cursor: pointer;
   background: white;
 }
+
+.footer-contact-item {
+    margin: 20px 0;
+}
+
+.whatsapp-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: #ffffff; /* Ajusta según el color de tu footer */
+    transition: transform 0.3s ease;
+}
+
+.whatsapp-link:hover {
+    transform: translateY(-2px);
+    color: #25d366; /* Color oficial de WhatsApp */
+}
+
+.icon {
+    background-color: #25d366;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+}
+
+.text-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.phone-number {
+    font-weight: bold;
+    font-size: 1.1rem;
+}

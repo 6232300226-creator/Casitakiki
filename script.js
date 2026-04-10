@@ -70,7 +70,9 @@ function actualizarBotonLogin(user) {
    CARGAR PRODUCTOS
 ========================================= */
 async function cargarProductos() {
+    // CORRECCIÓN: Asegurarse de usar _supabase (el cliente), no supabase
     const { data, error } = await _supabase.from('productos').select('*');
+    
     if (error) {
         console.error("Error al cargar productos:", error);
         return;
